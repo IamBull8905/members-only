@@ -6,10 +6,12 @@ const session = require("express-session");
 const passport = require("passport");
 const pgSession = require("connect-pg-simple")(session);
 const { pgPool } = require("./utilities/database");
+const { authRouter } = require("./routers/authRouter");
+const { holdingRouter } = require("./routers/holdingRouter");
 require("./utilities/passport");
 
 const app = express();
-
+app.use(express.urlencoded({ extended: true }));
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 app.use(
@@ -29,13 +31,15 @@ app.use(
 );
 app.use(passport.session());
 app.use((req, res, next) => {
-    console.log(req.session);
-    console.log(req.user);
+    // console.log(req.session);
+    // console.log(req.user);
     next();
 });
 
+app.use("/auth", authRouter);
+app.use("/holding", holdingRouter);
 app.get("/", (req, res) => {
-  res.send("I'm working!");
+  res.send("Renders homepage - wip");
 });
 
 const PORT = process.env.PORT || 3000;

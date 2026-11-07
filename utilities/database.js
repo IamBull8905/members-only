@@ -1,5 +1,5 @@
 const { Pool } = require("pg");
-const { loadEnvFile } = require('node:process');
+const { loadEnvFile } = require("node:process");
 loadEnvFile();
 
 const SQL = `CREATE TABLE IF NOT EXISTS Users (
@@ -18,12 +18,24 @@ CREATE TABLE IF NOT EXISTS Messages (
     created_at TIMESTAMPTZ,
     message_text TEXT,
     author_id INTEGER REFERENCES Users(id)
-);`
-
+);`;
 
 const pgPool = new Pool({
   connectionString: process.env.LOCAL_CONNECTION_STRING,
 });
 
+async function insertCredentialsIntoDb(
+  firstName,
+  lastName,
+  email,
+  hashedPassword,
+) {
+  const membershipStatus = "Newbie";
+  const result = await pgPool.query(
+    "INSERT INTO Users (first_name, last_name, email, password_hash, membership_status, admin_status) VALUES ($1, $2, $3, $4, $5, FALSE) RETURNING *",
+    [firstName, lastName, email, hashedPassword, membershipStatus],
+  );
+  return result.rows[0];
+}
 
-module.exports = { pgPool };
+module.exports = { pgPool, insertCredentialsIntoDb };

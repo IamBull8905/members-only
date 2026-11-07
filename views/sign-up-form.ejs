@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+</head>
+<body>
+    <h1>Sign Up</h1>
+    <%- include("partials/errors.ejs") %>
+    <form action="/auth/sign-up" method="POST">
+        <label for="firstName">First Name:</label>
+        <input id="firstName" name="firstName" type="text" min="1" max="10" value="<%=locals.firstName || '' %>" required>
+        <label for="lastName">Last Name:</label>
+        <input id="lastName" name="lastName" type="text" min="1" max="10" value="<%=locals.lastName || '' %>" required>
+        <label for="email">Email Address: (will be your username too)!</label>
+        <input id="email" name="email" type="email" value="<%=locals.email || '' %>" required>
+        <label for="password">Password (must include 1 uppercase & lowercase character, a number and a special character):</label>
+        <input id="password" name="password" type="password" minlength="8" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}" value="<%=locals.password || '' %>" required>
+        <label for="confirmPassword">Confirm password:</label>
+        <input id="confirmPassword" name="confirmPassword" type="password" minlength="8" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}" required>
+        <button type="submit">Submit details</button>
+    </form>
+</body>
+</html>
