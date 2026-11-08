@@ -38,4 +38,15 @@ async function insertCredentialsIntoDb(
   return result.rows[0];
 }
 
-module.exports = { pgPool, insertCredentialsIntoDb };
+async function updateMembershipStatusInDb(userId) {
+  await pgPool.query(
+    `
+    UPDATE users
+    SET membership_status = 'Member'
+    WHERE id = $1;
+    `,
+    [userId],
+  );
+}
+
+module.exports = { pgPool, insertCredentialsIntoDb, updateMembershipStatusInDb };

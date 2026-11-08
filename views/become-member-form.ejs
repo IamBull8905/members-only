@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Membership Portal</title>
+</head>
+<body>
+    <%- include("partials/errors.ejs") %>
+    <div class="membership-container">
+        <form action="/holding/membership-portal" method="POST">
+            <label for="memberPassword">Enter the secret password:</label>
+            <input id="memberPassword" name="memberPassword" type="password" required>
+            <button type="submit">Join the club!</button>
+        </form>
+    </div>
+</body>
+</html>
