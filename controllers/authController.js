@@ -1,5 +1,6 @@
 const { body, validationResult, matchedData } = require("express-validator");
 const bcrypt = require("bcryptjs");
+const passport = require("../utilities/passport");
 const { insertCredentialsIntoDb } = require("../utilities/database");
 
 function isAuth(req, res, next) {
@@ -51,6 +52,16 @@ const userValidationChecks = [
     }),
 ];
 
+const userLoginChecks = [
+  body("email")
+    .trim()
+    .notEmpty()
+    .withMessage("Must enter an email address.")
+    .isEmail()
+    .withMessage("Must enter a valid email address."),
+  body("password").notEmpty().withMessage("Must enter a password."),
+];
+
 const insertCredentials = [
   ...userValidationChecks,
   async (req, res) => {
@@ -87,4 +98,21 @@ const insertCredentials = [
   },
 ];
 
-module.exports = { insertCredentials, isAuth };
+const loginUser = [
+  ...userLoginChecks,
+  async (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).render("login-form", {
+        errors: errors.array(),
+        email: req.body.email,
+      });
+    }
+    passport.authenticate("local", {
+      successRedirect: "/holding/protected-dashboard",
+      failureRedirect: "/auth/login",
+      failureMessage: true,
+    })(req, res, next);
+  },
+];
+module.exports = { insertCredentials, isAuth, loginUser };

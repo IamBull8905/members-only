@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log In</title>
+</head>
+<body>
+    <h1>Log In</h1>
+    <%- include("partials/errors.ejs") %>
+    <form action="/auth/login" method="POST">
+        <label for="email">Email Address (username):</label>
+        <input id="email" type="email" name="email" value="<%=locals.givenEmail || '' %>" required>
+        <label for="password">Password:</label>
+        <input id="password" type="password" name="password" value="<%=locals.givenPassword || '' %>" required>
+        <button type="submit">Login to your account</button>
+    </form>
+</body>
+</html>
